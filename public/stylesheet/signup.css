@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+body {
+    
+   background-color: white;
+    font-family: 'Poppins',sans-serif;
+}
+.registration-container {
+    max-width: 400px;
+    margin: 0 auto;
+    background: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    margin-top: 50px;
+}
+
+.registration-container h3 {
+    color: rgb(82, 14, 172);
+    text-align: center;
+}
+
+.registration-container label {
+    font-weight: 300;
+    color: #000000;
+}
+
+.form-control {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgb(148, 144, 144);
+    border-radius: 10px;
+    color: #706c6c;
+}
+
+.form-control::placeholder {
+    color: rgb(156, 156, 156);
+    opacity: 1;
+}
+
+.form-control:focus {
+    background: rgba(245, 241, 241, 0.3);
+    border: none;
+    color: #333;
+}
+
+.btn-primary {
+    background: rgb(14, 172, 35);
+    border: none;
+    width: 100%;
+    color: #1F3632;
+}
+

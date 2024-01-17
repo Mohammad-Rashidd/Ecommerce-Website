@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            padding-top: 70px;
+        }
+
+
+
+
+        #sidebar-wrapper {
+            width: 250px;
+            background-color: #343a40;
+            color: #ffffff;
+
+        }
+
+        #sidebar-wrapper .sidebar-heading {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        #sidebar-wrapper .list-group-item {
+            padding: 15px;
+            text-align: center;
+            border: none;
+            color: #ffffff;
+        }
+
+        #sidebar-wrapper .list-group-item:hover {
+            background-color: #007bff;
+        }
+
+
+        #page-content-wrapper {
+            width: calc(100% - 250px);
+
+        }
+
+        .navbar {
+            background-color: #000000;
+
+            box-shadow: 0 4px 2px -2px gray;
+            min-height: 20px;
+            padding: 3px;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+        }
+
+        .navbar-toggler {
+            background-color: #007bff;
+
+        }
+
+        .navbar-nav {
+            margin-left: auto;
+        }
+
+        .navbar-nav .nav-item {
+            margin-left: 10px;
+        }
+
+        .navbar-nav .nav-link {
+            color: #ffffff;
+        }
+
+        .navbar-brand img {
+            height: 20px;
+
+            margin-right: 10px;
+
+        }
+
+        .container-fluid {
+            padding: 10px;
+        }
+
+        .profile-pic {
+            width: 100px;
+            height: 100px;
+        }
+
+
+
+        #sidebarToggle {
+            background-color: #9ab9da;
+            color: #ffffff;
+            border: none;
+            padding: 8px 10px;
+            cursor: pointer;
+            display: none;
+        }
+
+        @media (max-width: 992px) {
+            #wrapper.toggled #sidebar-wrapper {
+                margin-left: -250px;
+            }
+
+            #sidebarToggle {
+                display: block;
+            }
+        }
+
+        .list-group-item:hover {
+            background-color: #007bff;
+
+            color: #b40b0b;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" id="sidebarToggle">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <a class="navbar-brand" href="#">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbc84oY0DleNaQ5jQUEszXCwXLWkGLmeutZQ&usqp=CAU"
+                    alt="Logo">
+                eCart Admin
+            </a>
+
+
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <!-- Sidebar and Page Content -->
+
+    <div class="d-flex" id="wrapper">
+
+        <!-- Sidebar -->
+        <div class="bg-dark text-light " id="sidebar-wrapper">
+            <div class="sidebar-heading py-4 px-3">
+                <img src="/image/photo.png" alt="Profile Photo" class="img-fluid profile-pic rounded-circle mb-2">
+                <h5>Mohammad Rashid</h5>
+            </div>
+            <div class="list-group list-group-flush">
+                <a href="/admin/dash"
+                    class="list-group-item list-group-item-action fa-solid fas fa-layer-group bg-dark text-light mb-2">
+                    Dashboard</a>
+                <a href="/admin/allusers"
+                    class="list-group-item list-group-item-action fa-solid fas fa-user bg-dark text-light mb-2">
+                    Users</a>
+                <a href="/admin/categories"
+                    class="list-group-item list-group-item-action fa-solid fas fa-th-large bg-dark text-light mb-2">
+                    Categories</a>
+                <a href="/admin/products"
+                    class="list-group-item list-group-item-action fa-solid fas fa-box-open bg-dark text-light mb-2">
+                    Products</a>
+                <a href="/admin/orders"
+                    class="list-group-item list-group-item-action fa-solid fas fa-cart-arrow-down bg-dark text-light">
+                    Orders</a>
+                <a href="/admin/banners"
+                    class="list-group-item list-group-item-action fa-solid fas fa-flag bg-dark text-light"> Manage
+                    Banner</a>
+                <a href="/admin/coupons"
+                    class="list-group-item list-group-item-action fa-solid fas fa-money-bill-wave bg-dark text-light">
+                    Manage
+                    Coupen</a>
+                <a href="/admin/sales-report"
+                    class="list-group-item list-group-item-action fa-solid fas fa-file-export bg-dark text-light"> Sales
+                    Report</a>
+                <a href="/admin/notifications"
+                    class="list-group-item list-group-item-action fa-solid fas fa-bell bg-dark text-light"> Return
+                    Requests</a>
+            </div>
+        </div>
+
+
+        <!-- Page content -->
+        <div id="page-content-wrapper">
+
+            <div class="container-fluid py-4">
+                <div class="header d-flex justify-content-between">
+                    <h3 class="h3 text-second fw-bold mb-3">Dashboard</h3>
+                    <div class="wrap-year d-flex">
+                        <p class="fw-bold h6 mt-2 me-1">Year</p>
+                        <select role="button" class="form-select" style="width: 10rem; height: 2rem" name="year"
+                            id="changeYear">
+                            <% yearsArray.forEach(year=> { %>
+                                <option id="year" value="<%= year %>">
+                                    <%= year %>
+                                </option>
+                                <% }) %>
+                        </select>
+                    </div>
+                </div>
+
+                <canvas id="myChart" style="width: 100%; margin-right: 3rem; margin-top: -1.5rem"></canvas>
+
+                <div class="details d-flex justify-content-around mb-3">
+                    <div
+                        class="d-flex rounded flex-column align-items-center px-4 justify-content-center bg-success fw-bold">
+                        <p class="text-white mt-4" style="margin-bottom: -10px;">Total Revenue</p>
+                        <p class="text-white fw-bold fa-2x">₹<%= totalRevenue %>/-</p>
+                    </div>
+                    <div
+                        class="d-flex rounded flex-column align-items-center px-4 justify-content-center bg-warning fw-bold">
+                        <p class="text-white mt-4" style="margin-bottom: -10px;">Total Customers</p>
+                        <p class="text-white fw-bold fa-2x">
+                            <%= customers %>
+                        </p>
+                    </div>
+                    <div
+                        class="d-flex rounded flex-column align-items-center px-4 justify-content-center bg-danger fw-bold">
+                        <p class="text-white mt-4" style="margin-bottom: -10px;">Total Products</p>
+                        <p class="text-white fw-bold fa-2x">
+                            <%= products %>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="wrap-year d-flex justify-content-between">
+                    <p class="fw-bold h6 mt-2 me-1">Today</p>
+                    <input type="checkbox" class="me-5 " name="day" id="1day">
+
+                    <p class="fw-bold h6 ms-5 mt-2 me-1">This Month</p>
+                    <input type="checkbox" class="me-5 ms-2 " name="week" value="1" id="month">
+
+                    <p class="fw-bold h6 ms-5 mt-2 me-1">This Week</p>
+                    <input type="checkbox" class="me-5 ms-2 " name="week" value="1" id="week">
+                </div>
+
+                <table style="width: 100%;" id="exportToTable" class="table mt-5 table-striped table-bordered table-sm"
+                    cellspacing="0" width="100%">
+                    <thead class="table-dark">
+                        <tr>
+                            <th class="th-sm">Customer</th>
+                            <th class="th-sm">Product_Name</th>
+                            <th class="th-sm">Ordered_Date</th>
+                            <th class="th-sm">Delivered_Date</th>
+                            <th class="th-sm">Quantity</th>
+                            <th class="th-sm">Payment</th>
+                            <th class="th-sm">Amount</th>
+                        </tr>
+                    </thead>
+                    <% function toDateAndTime(timestamp) { %>
+                        <% const date=new Date(timestamp); %>
+                            <% const options={ year: 'numeric' , month: 'long' , day: 'numeric' , hour: 'numeric' ,
+                                minute: 'numeric' , hour12: true }; %>
+                                <%= date.toLocaleString('en-US', options) %>
+                                    <% } %>
+                                        <tbody>
+                                            <% orders.forEach(order=> { %>
+                                                <tr>
+                                                    <td>
+                                                        <%= order.user.username %>
+                                                    </td>
+                                                    <td>
+                                                        <%= order.product.name %>
+                                                    </td>
+                                                    <td>
+                                                        <%= toDateAndTime(order.createdAt) %>
+                                                    </td>
+                                                    <% if (order.items.delivered_on) { %>
+                                                        <td>
+                                                            <%= toDateAndTime(order.items.delivered_on) %>
+                                                        </td>
+                                                        <% } else { %>
+                                                            <td>Item not delivered yet</td>
+                                                            <% } %>
+                                                                <td>
+                                                                    <%= order.items.quantity %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= order.payment_method %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= order.items.price %>
+                                                                </td>
+                                                </tr>
+                                                <% }) %>
+                                        </tbody>
+                </table>
+
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#exportToTable').DataTable({
+                paging: true,
+                searching: true,
+                ordering: true,
+                responsive: true,
+            });
+        });
+
+        $(document).ready(async () => {
+            const dayCheckbox = document.getElementById("1day");
+            const monthSelect = document.getElementById("month");
+            const weekSelect = document.getElementById("week");
+
+            dayCheckbox.addEventListener("change", function () {
+                const currentURL = window.location.href;
+                const url = new URL(currentURL);
+                if (dayCheckbox.checked) {
+                    url.searchParams.set("day", "1");
+                } else {
+                    url.searchParams.delete("day");
+                }
+                window.location.href = url.toString();
+            });
+
+
+
+            function updateMonthQueryParameter() {
+                const currentURL = window.location.href;
+                const url = new URL(currentURL);
+                if (monthSelect.checked) {
+                    url.searchParams.set("month", "1");
+                } else {
+                    url.searchParams.delete("month");
+                }
+                window.location.href = url.toString();
+            }
+
+            monthSelect.addEventListener("change", function () {
+                updateMonthQueryParameter();
+            });
+
+            function updateWeekQueryParameter() {
+                const currentURL = window.location.href;
+                const url = new URL(currentURL);
+                if (weekSelect.checked) {
+                    url.searchParams.set("week", "1");
+                } else {
+                    url.searchParams.delete("week");
+                }
+                window.location.href = url.toString();
+            }
+
+            weekSelect.addEventListener("change", function () {
+                updateWeekQueryParameter();
+            })
+
+            function hasDayQueryParameter() {
+                const url = new URL(window.location.href);
+                return url.searchParams.has("day");
+            }
+            function hasWeekQueryParameter() {
+                const url = new URL(window.location.href);
+                return url.searchParams.has("week");
+            }
+            function hasMonthQueryParameter() {
+                const url = new URL(window.location.href);
+                return url.searchParams.has("month");
+            }
+
+            function updateCheckboxState() {
+                dayCheckbox.checked = hasDayQueryParameter();
+                monthSelect.checked = hasMonthQueryParameter();
+                weekSelect.checked = hasWeekQueryParameter();
+            }
+            updateCheckboxState();
+
+
+            try {
+                await fetch('/admin/get-sales')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            showGraph(data.data)
+                        }
+                    })
+            } catch (err) {
+                console.log(err)
+            }
+
+            $('#changeYear').on('change', async () => {
+                let year = $('#changeYear').val();
+                try {
+                    await fetch(`/admin/get-sales?year=${year}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                showGraph(data.data)
+                            }
+                        })
+                } catch (err) {
+                    console.log(err)
+                }
+            })
+
+            function showGraph(sales) {
+                var chartExist = Chart.getChart("myChart");
+                if (chartExist != undefined) {
+                    chartExist.destroy();
+                }
+
+                const xValues = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+                const ctx = document.getElementById('myChart');
+
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: xValues,
+                        datasets: [{
+                            label: 'Revenue',
+                            data: sales,
+                            borderWidth: 1
+                        }]
+                    },
+
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const sidebarToggle = document.getElementById("sidebarToggle");
+        sidebarToggle.addEventListener("click", function () {
+            document.getElementById("wrapper").classList.toggle("toggled");
+        });
+    </script>
+</body>
+
+</html>

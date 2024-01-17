@@ -1,0 +1,765 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Checkout page</title>
+
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <style>
+        .navbar {
+            border-bottom: 1px solid #cccccc;
+            background-color: #520eac;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+
+        .navbar .brand-name {
+            color: #fff;
+        }
+
+        .navbar .nav-link {
+            color: #fff;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .navbar .dropdown-menu {
+            padding: 0px 0px;
+            border-radius: 0px;
+        }
+
+        .navbar .dropdown-menu .dropdown-item {
+            padding: 8px 16px;
+            border-bottom: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        .navbar .navbar {
+            padding: 0px;
+            background-color: #ddd;
+        }
+
+        .navbar .navbar .nav-item .nav-link {
+            padding: 8px 20px;
+            color: #000;
+            font-size: 15px;
+        }
+
+        .outer-container {
+            background-color: rgb(243, 243, 243);
+            position: relative;
+        }
+
+        /* Adjusting form input fields */
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        /* Styling the headers and buttons */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .h4.user-text {
+            font-weight: bold;
+            margin-bottom: 0.75rem;
+        }
+
+        .btn.user-btn {
+            padding: 0.5rem 1rem;
+            background-color: #520eac;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn.user-btn:hover {
+            background-color: #1eb300;
+        }
+
+        /* Styling the address containers */
+        .address-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        /* Summary card styling */
+        .card {
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1rem;
+        }
+
+        .card-header {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .list-group-item {
+            border: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 1rem;
+        }
+
+        .list-group-item:not(:last-child) {
+            border-bottom: 1px solid #ccc;
+        }
+
+        .card-header {
+            background-color: #520eac;
+            color: white;
+        }
+
+        @media (max-width: 767.98px) {
+            .outer-container {
+                flex-direction: column;
+            }
+
+            .outer-container .container-fluid:first-child {
+                width: 100%;
+                max-width: 100%;
+            }
+
+            .outer-container .container-fluid:last-child {
+                width: 100%;
+                max-width: 100%;
+                margin-top: 20px;
+            }
+
+            .outer-container .container-fluid:last-child .card-body {
+                padding-right: 0;
+            }
+
+            .outer-container .container-fluid:last-child .list-group-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .outer-container .container-fluid:last-child .payment-options button {
+                width: 100%;
+                max-width: 100%;
+                margin-top: 20px;
+            }
+        }
+
+        .card-body .list-group-item {
+            padding: 0.5rem 1rem;
+
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .couponss {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 4;
+            width: 30rem;
+            box-shadow: 0px 0px 20px #ccc;
+        }
+
+        .couponss .know-less,
+        .couponss .description {
+            display: none;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-md navbar-light  sticky-top">
+        <div class="container-fluid">
+            <div class="col-md-2 my-auto d-none d-md-block">
+                <a href="/userHome" class="navbar-brand d-md-block">
+                    <h5 class="brand-name">eCart</h5>
+                </a>
+            </div>
+
+
+            <div class="col-md-5 my-auto">
+                <form role="search" id="searchForm">
+                    <div class="input-group">
+                        <input type="search" placeholder="Search your product" class="form-control" id="searchInput" />
+                        <button class="btn bg-white" type="submit">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+
+            <button id="navbarToggle" class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse col-md-5 my-auto justify-content-end" id="navbarNav">
+                <ul class="navbar-nav ml-auto ">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/products">
+                            <i class="fa fa-cube"></i> All Products
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/orders">
+                            <i class="fa fa-shopping-bag"></i> Orders
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/cart">
+                            <i class="fa fa-shopping-cart"></i> Cart
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/my-account/wishlist">
+                            <i class="fa fa-heart"></i> Wishlist
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/my-account">
+                            <i class="fa fa-user"></i> Profile
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">
+                            <i class="fa fa-sign-out"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="outer-container d-flex justify-content-center align-items-start py-5">
+        <div class="container-fluid mt-3 ms-3" style="max-width: 50%;">
+
+            <div class="header d-flex align-items-center justify-content-between">
+                <h3 class="h4 user-text fw-bold mb-3">Checkout Page</h3>
+                <input id="addAddressButton" class="btn user-btn" type="button" value="New Address">
+            </div>
+            <div class="header d-flex flex-column align-items-center justify-content-between">
+
+                <form action="/my-account/checkout/new-address" method="post" class=" add-form container hidden">
+                    <div class="row">
+                        <div class="row col-md-6 me-3">
+                            <label for="form">Name</label>
+                            <input name="address_name" type="text" class="form-control" required>
+                        </div>
+                        <div class="row col-md-6">
+                            <label for="form">Phone</label>
+                            <input name="phone" type="text" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="row col-md-6 me-3">
+                            <label for="form">House Name</label>
+                            <input name="house_name" type="text" class="form-control" required>
+                        </div>
+                        <div class="row col-md-6">
+                            <label for="form">Area/Street</label>
+                            <input name="area_street" type="text" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="row col-md-6 me-3">
+                            <label for="form">Locality</label>
+                            <input name="locality" type="text" class="form-control" required>
+                        </div>
+                        <div class="row col-md-6">
+                            <label for="form">Town</label>
+                            <input name="town" type="text" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="row col-md-6 me-3">
+                            <label for="form">State</label>
+                            <select class="form-select" name="state">
+                                <option value="india">Select State</option>
+                                <option value="Andhra Pradesh">Andhra Pradesh</option>
+                                <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                                <option value="Assam">Assam</option>
+                                <option value="Bihar">Bihar</option>
+                                <option value="Chhattisgarh">Chhattisgarh</option>
+                                <option value="Goa">Goa</option>
+                                <option value="Gujarat">Gujarat</option>
+                                <option value="Haryana">Haryana</option>
+                                <option value="Himachal Pradesh">Himachal Pradesh</option>
+                                <option value="Jharkhand">Jharkhand</option>
+                                <option value="Karnataka">Karnataka</option>
+                                <option value="Kerala">Kerala</option>
+                                <option value="Madhya Pradesh">Madhya Pradesh</option>
+                                <option value="Maharashtra">Maharashtra</option>
+                                <option value="Manipur">Manipur</option>
+                                <option value="Meghalaya">Meghalaya</option>
+                                <option value="Mizoram">Mizoram</option>
+                                <option value="Nagaland">Nagaland</option>
+                                <option value="Odisha">Odisha</option>
+                                <option value="Punjab">Punjab</option>
+                                <option value="Rajasthan">Rajasthan</option>
+                                <option value="Sikkim">Sikkim</option>
+                                <option value="Tamil Nadu">Tamil Nadu</option>
+                                <option value="Telangana">Telangana</option>
+                                <option value="Tripura">Tripura</option>
+                                <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                <option value="Uttarakhand">Uttarakhand</option>
+                                <option value="West Bengal">West Bengal</option>
+                                <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+                                <option value="Chandigarh">Chandigarh</option>
+                                <option value="Dadra and Nagar Haveli and Daman and Diu">Dadra and Nagar Haveli and
+                                    Daman
+                                    and
+                                    Diu
+                                </option>
+                                <option value="Lakshadweep">Lakshadweep</option>
+                                <option value="Delhi">Delhi</option>
+                                <option value="Puducherry">Puducherry</option>
+                            </select>
+                        </div>
+                        <div class="row col-md-6">
+                            <label for="form">Pincode</label>
+                            <input name="pincode" type="number" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="row col-md-6 me-3">
+                            <label for="form">Landmark</label>
+                            <input name="landmark" type="text" class="form-control" required>
+                        </div>
+                        <div class="row col-md-6">
+                            <label for="form">Alternate Phone</label>
+                            <input name="alternate_phone" type="number" class="form-control">
+                            <input name="user_id" type="hidden" value="<%= userData._id %>" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" value="HOME" name="address_type"
+                                id="flexRadioDefault1" checked>
+                            <label class="form-check-label" for="flexRadioDefault1">
+                                HOME
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" value="WORK" type="radio" name="address_type"
+                                id="flexRadioDefault2">
+                            <label class="form-check-label" for="flexRadioDefault2">
+                                WORK
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row mt-2 mb-3 d-flex ">
+                        <input class="btn but col-md-3 user-btn btn-md" type="submit" />
+                        <input class="ms-2 btn col-md-3 but clear-btn btn-danger btn-md" type="reset" autocomplete="on"
+                            value="Clear" />
+
+                        <a id="upButton" class="btn col-md-1 ms-3 user-btn"><i class="fa fa-angle-up"></i></a>
+
+                    </div>
+                </form>
+
+                <form id="orderForm">
+                    <% address.forEach(addressItem=> { %>
+                        <div class="address-container d-flex align-items-center">
+                            <div class="form-check me-3">
+                                <input id="addressInput" class="form-check-input" type="radio" name="address"
+                                    value="<%= addressItem._id %>" name="flexRadioDefault" required>
+                            </div>
+                            <div class="row card pt-3 mt-2 col-md-12">
+                                <div class="headercont d-flex justify-content-between">
+                                    <div style="width: 5rem;" class="btn btn-sm btn-dark">
+                                        <%= addressItem.address_type %>
+                                    </div>
+                                </div>
+                                <p class="h5">
+                                    <%= addressItem.address_name %>&emsp; <%= addressItem.phone %>
+                                </p>
+                                <p class="text-normal">
+                                    <%= addressItem.house_name %>(H),
+                                        <%= addressItem.locality %>,
+                                            <%= addressItem.area_street %>,
+                                                <%= addressItem.landmark %>,
+                                                    <%= addressItem.state %>
+                                                        <span class="fw-bold">
+                                                            -<%= addressItem.pincode %>
+                                                        </span>
+                                </p>
+                            </div>
+                        </div>
+                        <hr>
+                        <% }); %>
+
+
+                            <input id="proceedPayment" class="btn user-btn mb-5" type="button"
+                                value="continue to payment">
+                            <div class="payment-options hidden">
+                                <div class="user-text h6 mb-2">Payment Options</div>
+                                <div class="form-check">
+                                    <input class="form-check-input" value="COD" type="radio" name="payment_method" id=""
+                                        checked>
+                                    <label class="form-check-label" for="flexRadioDefault1">
+                                        Cash On Delivery
+                                    </label>
+                                </div>
+                                <% if (wallet) { %>
+                                    <div class="form-check">
+                                        <input class="form-check-input" value="wallet" type="radio"
+                                            name="payment_method" id="" checked>
+                                        <label class="form-check-label" for="flexRadioDefault1">
+                                            eCart Wallet (₹<%= userData.user_wallet %>)
+                                        </label>
+                                    </div>
+                                    <% } %>
+                                        <div class="form-check mb-3">
+                                            <input class="form-check-input" value="Online Payment" type="radio"
+                                                name="payment_method" id="">
+                                            <label class="form-check-label" for="flexRadioDefault2">
+                                                Online Payment
+                                            </label>
+                                        </div>
+                                        <input type="hidden" id="price" name="price" value="<%= totalAmount %>">
+                                        <input type="hidden" id="discount" name="discount" value="">
+                                        <input type="hidden" id="coupon" name="coupon" value="">
+                                        <input type="hidden" id="coupon_code" name="coupon_code" value="">
+                                        <button style="padding: 0.5rem 20rem;" class="btn user-btn mb-5"
+                                            id="submitOrder">Place Order</button>
+                            </div>
+                </form>
+            </div>
+        </div>
+
+
+
+        <div class="container-fluid mt-3 ms-3 p-3" style="max-width: 40%;">
+
+            <div role="button" id="checkCoupon" class=" card user-text p-2 bg-light ms-5">
+                <h4 class="mt-1"><i class="fa-solid ms-3 fa fa-tags"></i> Check Coupon?</h4>
+            </div>
+
+            <div class="card-header p-3">
+                <h5 class="mb-0">Summary</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
+                        Products (<%= cart.length %>)
+                            <span>₹<%= totalAmount %></span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                        Shipping(free)
+                        <span>₹ 0</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                        Discount:
+                        <span id="showDiscount">0%</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+                        <div>
+                            <strong>Total amount</strong>
+                            <strong>
+                                <p class="mb-0">(including All taxes)</p>
+                            </strong>
+                        </div>
+                        <span><strong>₹<%= totalAmount %></strong></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="couponss bg-light p-3 card hidden">
+            <i style="margin-left: 26rem;" id="back" role="button" class="fa-regular fa fa-times mb-2 text-danger"></i>
+            <% coupons.forEach(coupon=> { %>
+                <div class="card p-2 mb-2">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <input type="button" value="<%= coupon.coupon_code %>" class=" btn btn-sm bg-warning"
+                            role="button">
+                        <a class="text-decoraton-none fw-bold text-primary" role="button"
+                            onclick="applyCoupon('<%= coupon._id %>')">Apply</a>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="text-success fw-bold">Discount: <%= coupon.discount %>% </p>
+                        <p class="fw-bold text-secondary">EXP: <%= coupon.exp_date %><br>
+                                <span class="fw-bold text-secondary">Min: ₹<%= coupon.min_amount %></span>
+                        </p>
+                    </div>
+                    <p class="text-secondary description fw-normal">
+                        <%= coupon.description %>
+                    </p>
+                    <div role="button" class="text-primary know-more h6">show more</div>
+                    <div role="button" class="text-primary know-less h6">show less</div>
+                </div>
+                <% }); %>
+        </div>
+
+    </div>
+
+
+
+
+    <!-- Footer -->
+    <!-- <%- include("../partials/footer") %> -->
+    <script>
+        const addAddressButton = document.getElementById('addAddressButton');
+        const addAddressForm = document.querySelector('.add-form');
+        const upButton = document.getElementById('upButton');
+        const proceedPaymentButton = document.getElementById('proceedPayment');
+        const paymentOptions = document.querySelector('.payment-options');
+        const checkCoupon = document.getElementById('checkCoupon');
+        const couponss = document.querySelector('.couponss');
+        const back = document.getElementById('back');
+        const knowMoreButtons = document.querySelectorAll('.couponss .know-more');
+        const knowLessButtons = document.querySelectorAll('.couponss .know-less');
+        const descriptions = document.querySelectorAll('.couponss .description');
+
+
+        addAddressButton.addEventListener('click', function () {
+            addAddressForm.classList.toggle('hidden');
+        });
+        upButton.addEventListener('click', function () {
+            addAddressForm.classList.add('hidden');
+        });
+
+        proceedPaymentButton.addEventListener('click', function () {
+            paymentOptions.classList.toggle('hidden');
+        });
+
+        checkCoupon.addEventListener('click', function () {
+            couponss.classList.remove('hidden');
+            proceedPaymentButton.classList.add('hidden');
+            paymentOptions.classList.add('hidden');
+        });
+
+        back.addEventListener('click', function () {
+            couponss.classList.toggle('hidden');
+            proceedPaymentButton.classList.toggle('hidden');
+
+        });
+
+        knowMoreButtons.forEach((button, index) => {
+            button.addEventListener('click', function () {
+                descriptions[index].style.display = 'block';
+                knowMoreButtons[index].style.display = 'none';
+                knowLessButtons[index].style.display = 'block';
+            });
+        });
+
+        knowLessButtons.forEach((button, index) => {
+            button.addEventListener('click', function () {
+                descriptions[index].style.display = 'none';
+                knowMoreButtons[index].style.display = 'block';
+                knowLessButtons[index].style.display = 'none';
+            });
+        });
+
+        applyCoupon = async (id) => {
+            try {
+                const total = document.getElementById('price').value;
+                const response = await fetch(`/cart/checkout?coupon=${id}&total=${total}`);
+
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log("data", data);
+
+                    if (!data.success) {
+                        Swal.fire(
+                            'Oops',
+                            `You need a minimum purchase of ₹${data.min_amount} to apply this coupon.`,
+                            'error'
+                        );
+
+                        return;
+                    }
+                    const newTotalAmount = data.total;
+                    const productsElement = document.querySelector('.list-group-item:nth-child(1) span');
+                    const totalAmountElement = document.querySelector('.list-group-item:nth-child(4) span strong');
+                    const discountElement = document.getElementById('showDiscount');
+
+                    let price = document.getElementById('price');
+                    price.value = newTotalAmount;
+                    let coupon = document.getElementById('coupon');
+                    coupon.value = id;
+                    let discount = document.getElementById('discount');
+                    discount.value = data.discount
+                    let coupon_code = document.getElementById('coupon_code');
+                    coupon_code.value = data.coupon_code
+                    discountElement.textContent = `${data.discount}%`;
+
+                    productsElement.textContent = `₹${newTotalAmount}`;
+                    totalAmountElement.textContent = `₹${newTotalAmount}`;
+
+                    const couponss = document.querySelector('.couponss');
+                    const proceedPaymentButton = document.getElementById('proceedPayment');
+
+
+                    couponss.classList.toggle('hidden');
+                    proceedPaymentButton.classList.toggle('hidden');
+
+                    Swal.fire({
+                        title: 'Success!',
+                        text: `Coupon applied successfully! You saved ₹${total - newTotalAmount}.`,
+                        icon: 'success',
+                        timer: 2000,
+                        showConfirmButton: false
+                    })
+
+                } else {
+                    Swal.fire(
+                        'Oops',
+                        'Something went wrong. Please try again later.',
+                        'error'
+                    );
+                }
+            } catch (error) {
+                console.error('Error applying coupon:', error);
+            }
+        };
+
+
+        const submitOrder = document.getElementById('submitOrder');
+        if (submitOrder) {
+            submitOrder.addEventListener('click', async (e) => {
+                e.preventDefault();
+                let form = document.getElementById('orderForm');
+                if (form) {
+                    let formData = new FormData(form);
+                    const body = Object.fromEntries(formData);
+                    console.log("bodyyyy", body);
+                    await fetch('/cart/place-order', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(body)
+                    }).then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                location.assign('/cart/order-success')
+                            }
+                            if (data.status) {
+                                showRazorpay(data.order, data.user);
+                            }
+                        })
+                } else {
+                    console.error('Form element not found');
+                }
+            });
+        };
+
+        // const submitOrder = document.getElementById('submitOrder');
+        // if (submitOrder) {
+        //     submitOrder.addEventListener('click', async (e) => {
+        //         e.preventDefault();
+        //         let form = document.getElementById('orderForm');
+        //         if (form) {
+        //             let formData = new FormData(form);
+        //             const body = Object.fromEntries(formData);
+        //             console.log("bodyyyy", body);
+        //             const response = await fetch('/cart/place-order', {
+        //                 method: 'POST',
+        //                 headers: { 'Content-Type': 'application/json' },
+        //                 body: JSON.stringify(body)
+        //             });
+        //             const data = await response.json();
+
+        //             if (!data.success) {
+        //                 swal.fire({
+        //                     title: 'Out of Stock',
+        //                     text: 'Product out of stock',
+        //                     icon: 'error',
+        //                 });
+        //             } else {
+
+        //                 if (data.success) {
+        //                     location.assign('/cart/order-success');
+        //                 }
+        //                 if (data.status) {
+        //                     showRazorpay(data.order, data.user);
+        //                 }
+        //             }
+        //         } else {
+        //             console.error('Form element not found');
+        //         }
+        //     });
+        // };
+
+
+        showRazorpay = (order, user) => {
+            var options = {
+                "key": "rzp_test_0LOos3cYiJvhRq",
+                "amount": order.amount,
+                "currency": "INR",
+                "name": "Times Cart",
+                "description": "Test Transaction",
+                "image": "https://drive.google.com/uc?id=18EJgrQQfFCgLUCtUCOY-6tujL8KFX0qI",
+                "order_id": order.id,
+                "handler": function (response) {
+                    verifyPayment(response)
+                },
+                "prefill": {
+                    "name": user.username,
+                    "email": user.email,
+                    "contact": user.phone
+                },
+                "notes": {
+                    "address": "Razorpay Corporate Office"
+                },
+                "theme": {
+                    "color": "#2ade99"
+                }
+            };
+
+            var rzp1 = new Razorpay(options);
+            rzp1.open();
+            rzp1.on('payment.failed', function (response) {
+                swal.fire("Failed!", response.error.description, "error")
+                    .then(() => {
+                        location.assign('/')
+                    })
+            });
+        };
+
+        verifyPayment = async (response) => {
+            await fetch('/cart/verify-payment', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(response)
+            }).then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.assign('/cart/order-success')
+                    }
+                })
+        };
+
+    </script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+</body>
+
+</html>

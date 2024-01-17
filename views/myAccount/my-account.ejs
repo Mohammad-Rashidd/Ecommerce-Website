@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ecommerce Cart</title>
+
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .card {
+            background-color: #520eac;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .card h5 {
+            margin-bottom: 5px;
+            color: #520eac;
+        }
+
+        .card p {
+            color: #8264a8;
+            margin-bottom: 15px;
+        }
+
+        .custom-card {
+            background-color: rgb(255, 255, 255);
+            color: blue;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .custom-card a {
+            color: rgb(68, 68, 139);
+            text-decoration: none;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .custom-card .user-icon {
+            color: #520eac;
+        }
+
+        .custom-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(6, 161, 45, 0.5);
+            animation: glowing 1.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes glowing {
+            0% {
+                box-shadow: 0 0 10px rgba(15, 192, 29, 0.5);
+            }
+
+            100% {
+                box-shadow: 0 0 20px rgba(3, 129, 45, 0.5);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <%- include("../partials/userHeader") %>
+
+
+        <div class="container">
+            <div class="d-flex flex-column mt-3 user-text text-center py-1">
+                <h3 class="fw-bold">
+                    Account Details
+                </h3>
+            </div>
+
+            <div class="card p-4 mt-3 mx-auto user-details-card" style="max-width: 500px;">
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <h5 class="fw-bold">Name :</h5>
+                    </div>
+                    <div class="col-md-8">
+                        <p class="fw-normal">
+                            <%= userData.username %>
+                        </p>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <h5 class="fw-bold">Email :</h5>
+                    </div>
+                    <div class="col-md-8">
+                        <p class="fw-normal">
+                            <%= userData.email %>
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <h5 class="fw-bold">Phone :</h5>
+                    </div>
+                    <div class="col-md-8">
+                        <p class="fw-normal">
+                            <%= userData.phone %>
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <h5 class="fw-bold">My Wallet :</h5>
+                    </div>
+                    <div class="col-md-8">
+                        <p class="fw-normal">
+                            ₹<%= userData.user_wallet %>.00
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <% function toDateAndTime(timestamp) { %>
+                <% const date=new Date(timestamp); %>
+                    <% const options={ year: 'numeric' , month: 'long' , day: 'numeric' , hour: 'numeric' ,
+                        minute: 'numeric' , hour12: true }; %>
+                        <%= date.toLocaleString('en-US', options) %>
+                            <% } %>
+                                <button id="walletHistoryBtn" class="btn btn-dark mt-3 ms-2">Wallet History</button>
+                                <div id="walletHistory" class="card wallet-history mt-2" style="display: none;">
+                                    <div class="card-title h5 mt-2 user-text text-center fw-bold">Wallet History</div>
+                                    <div class="bg-secondary" style="height: 2px;"></div>
+                                    <% userData.wallet_history.forEach(item=> { %>
+                                        <div
+                                            class="card bg-light mt-2 d-flex flex-row justify-content-between align-items-center">
+                                            <div class="fw-normal">
+                                                <%= toDateAndTime(item.time) %>
+                                            </div>
+                                            <% if (item.status==='Debit' ) { %>
+                                                <div class="fw-bold text-danger">
+                                                    <%= item.status %>
+                                                </div>
+                                                <div class="fw-bold text-danger">₹<%= item.amount %>
+                                                </div>
+                                                <% } else { %>
+                                                    <div class="fw-bold text-success">
+                                                        <%= item.status %>
+                                                    </div>
+                                                    <div class="fw-bold text-success">₹<%= item.amount %>
+                                                    </div>
+                                                    <% } %>
+                                        </div>
+                                        <% }) %>
+                                </div>
+
+
+                                <div class="d-flex flex-wrap justify-content-center">
+                                    <div class="card custom-card py-3 mt-3 me-3 align-items-center justify-content-center"
+                                        style="width: 10rem;">
+                                        <a href="/orders"
+                                            class="d-flex flex-column align-items-center justify-content-center">
+                                            <i class="fa-solid user-icon fa fa-shopping-bag fa-4x"></i>
+                                            <h3 class="user-icon fw-bold">Orders</h3>
+                                            <p class="h6 user-text fw-normal">Check your orders</p>
+                                        </a>
+                                    </div>
+
+                                    <div class="card custom-card py-3 mt-3 me-3 align-items-center justify-content-center"
+                                        style="width: 10rem;">
+                                        <a href="/my-account/wishlist"
+                                            class=" d-flex flex-column align-items-center justify-content-center">
+                                            <i class="fa-regular user-icon fa fa-heart fa-4x"></i>
+                                            <h3 class="user-icon fw-bold">Wish List</h3>
+                                            <p class="h6 user-text fw-normal">Check your Wish list</p>
+                                        </a>
+                                    </div>
+
+                                    <div class="card custom-card py-3 mt-3 me-3 align-items-center justify-content-center"
+                                        style="width: 10rem;">
+                                        <a href="/cart"
+                                            class=" d-flex flex-column align-items-center justify-content-center">
+                                            <i class="fa-solid user-icon fa fa-shopping-cart fa-4x"></i>
+                                            <h3 class="user-icon fw-bold">Cart</h3>
+                                            <p class="h6 user-text fw-normal">Check your Cart</p>
+                                        </a>
+                                    </div>
+
+                                    <div class="card custom-card py-3 mt-3 align-items-center justify-content-center"
+                                        style="width: 10rem;">
+                                        <a href="/my-account/edit-details/<%= userData._id %>"
+                                            class=" d-flex flex-column align-items-center justify-content-center">
+                                            <i class="fa-solid user-icon fa fa-edit fa-4x"></i>
+                                            <h3 class="user-icon fw-bold">Edit</h3>
+                                            <p class="h6 user-text fw-normal">Edit your details</p>
+                                        </a>
+                                    </div>
+                                    <div class="card custom-card py-3 mt-3 ms-3 align-items-center justify-content-center"
+                                        style="width: 10rem;">
+                                        <a href="my-account/my-address"
+                                            class=" d-flex flex-column align-items-center justify-content-center">
+                                            <i class="fa-solid user-icon fa fa-map-marker fa-4x"></i>
+                                            <h3 class="user-icon fw-bold">Address</h3>
+                                            <p class="h6 user-text fw-normal">Manage your Address</p>
+                                        </a>
+                                    </div>
+                                </div>
+        </div>
+
+
+
+        <%- include("../partials/footer") %>
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const walletHistoryBtn = document.getElementById('walletHistoryBtn');
+                    const walletHistory = document.getElementById('walletHistory');
+
+                    walletHistoryBtn.addEventListener('click', function () {
+                        if (walletHistory.style.display === 'none') {
+                            walletHistory.style.display = 'block';
+                        } else {
+                            walletHistory.style.display = 'none';
+                        }
+                    });
+                });
+            </script>
+            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+</body>
+
+</html>

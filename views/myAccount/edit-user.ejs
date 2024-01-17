@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ecommerce Cart</title>
+
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #f7f7f7;
+        }
+
+        .user-text {
+
+            color: #520eac;
+        }
+
+        .label {
+            color: #520eac;
+        }
+
+        .password-fields {
+            display: none;
+        }
+
+        .add-form label {
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <%- include("../partials/userHeader") %>
+
+        <div class="container mt-3">
+            <div class="row col-md-12">
+                <p class="h4 fw-bold user-text">
+                    Edit your Details
+                </p>
+            </div>
+            <div class="card py-5 px-5 col-md-10">
+                <form class="add-form">
+                    <div class="row col-md-8 m-2">
+                        <div id="name-Err" class=" text-danger"></div>
+                        <label for="form">Name</label>
+                        <input id="user_name" type="text" value="<%= userData.username %>" class="form-control ">
+                    </div>
+
+                    <input id="user_id" type="hidden" autocomplete="on" value="<%= userData._id %>"
+                        class="form-control ">
+                    <div class="row col-md-8 m-2">
+                        <div id="phone-Err" class=" text-danger"></div>
+                        <label for="form">Phone</label>
+                        <input id="user_mobile" type="number" autocomplete="on" value="<%= userData.phone %>"
+                            class="form-control ">
+                    </div>
+                    <div class="row ms-3 col-md-8 " id="checkboxx">
+                        <input type="checkbox" id="checkBox" autocomplete="on" class="form-check-input ">
+                        <label class="form-check-label mb-3" for="exampleCheck1">Change Password </label>
+                    </div>
+                    <div class="row col-md-8 " id="currentPass">
+                        <div id="cur_pass_err" class=" text-danger"></div>
+                        <label class="pass" for="form">Enter your Current Password</label>
+                        <input id="current_pass" type="password" autocomplete="on" class="pass form-control ">
+
+                    </div>
+
+                    <div class="row confirm_new_pass col-md-8 password-fields" id="newPass">
+                        <div id="new_pass_err" class=" text-danger"></div>
+                        <label class="new_password" for="form">Enter Password</label>
+                        <input id="new_password_id" type="password" value="" class="new_password form-control">
+
+                    </div>
+                    <div class="row confirm_new_pass col-md-8 password-fields" id="confirmPass">
+                        <div id="confim_pass_err" class=" text-danger"></div>
+                        <label class="confirm_new_pass" for="form">Confirm Password</label>
+                        <input id="confirm_new_pass_id" type="password" value="" class="confirm_new_pass form-control">
+
+                    </div>
+                    <div class="row ms-1 d-flex">
+                        <input id="update_btn" class="btn btn-success but col-md-3 user-btn btn-lg" autocomplete="on"
+                            type="button" value="Update" /></input>
+                        <input id="resetField" class="ms-2 btn btn-danger col-md-3 but clear-btn btn-lg" type="reset"
+                            autocomplete="on" value="Reset" />
+                    </div>
+                    <div class="row m-1 d-flex">
+                        <input id="verify_pass" class="btn btn-success but_new col-md-3 user-btn btn-lg"
+                            autocomplete="on" type="button" value="verify" /></input>
+                    </div>
+                    <div class="row m-1 d-flex">
+                        <input id="Update_pass" class="btn btn-success Update_pass col-md-3 user-btn btn-lg"
+                            autocomplete="on" type="button" value="Update" /></input>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const changePasswordCheckbox = document.getElementById("checkBox");
+                const currentPasswordField = document.getElementById("currentPass");
+                const newPasswordField = document.getElementById("newPass");
+                const confirmPasswordField = document.getElementById("confirmPass");
+                const verifyPassButton = document.getElementById("verify_pass");
+                const updatePassButton = document.getElementById("Update_pass");
+                const updateButton = document.getElementById("update_btn");
+                const resetButtons = document.getElementById("resetField");
+
+                newPasswordField.style.display = "none";
+                confirmPasswordField.style.display = "none";
+                currentPasswordField.style.display = "none";
+                verifyPassButton.style.display = "none";
+                updatePassButton.style.display = "none";
+
+
+                changePasswordCheckbox.addEventListener("change", function () {
+                    currentPasswordField.style.display = changePasswordCheckbox.checked ? "block" : "none";
+                    verifyPassButton.style.display = changePasswordCheckbox.checked ? "block" : "none";
+                    updateButton.style.display = changePasswordCheckbox.checked ? "none" : "block";
+                    resetButtons.style.display = changePasswordCheckbox.checked ? "none" : "block";
+
+                });
+
+                let resetButton = document.querySelector('.clear-btn');
+                if (resetButton) {
+                    resetButton.addEventListener('click', function () {
+                        document.getElementById('user_name').value = '';
+                        document.getElementById('user_mobile').value = '';
+                    });
+                }
+            });
+
+
+            let submit = document.getElementById('update_btn');
+            if (submit) {
+                submit.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    //user id
+                    let _id = document.getElementById('user_id').value;
+
+                    let name = document.getElementById('user_name').value;
+                    let mobile = document.getElementById('user_mobile').value;
+
+                    let namerr = document.getElementById('name-Err');
+                    let phonerr = document.getElementById('phone-Err');
+
+                    namerr.textContent = '';
+                    phonerr.textContent = "";
+
+
+                    function isValidPhoneNumber(phoneNumber) {
+                        return /^\d{10}$/.test(phoneNumber) && phoneNumber.charAt(0) !== "0";
+                    }
+
+                    function isValidUsername(username) {
+                        return username.trim() !== "" && !/^\d+$/.test(username);
+                    }
+
+
+
+                    switch (true) {
+
+                        case !isValidUsername(name):
+                            namerr.textContent = "Enter a valid username";
+                            break;
+                        case !isValidPhoneNumber(mobile):
+                            phonerr.textContent = "Enter a valid 10-digit phone number ";
+                            break;
+                        default:
+                            let payload = {
+                                username: name,
+                                phone: mobile
+                            }
+                            await fetch(`/my-account/update-detail/${_id}`, {
+                                method: 'POST',
+                                body: JSON.stringify(payload),
+                                headers: { 'Content-Type': 'application/json' }
+                            }).then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        location.assign('/my-account');
+                                    }
+                                })
+
+                    }
+                })
+            };
+
+
+            const verify_pass = document.getElementById('verify_pass');
+
+            if (verify_pass) {
+                verify_pass.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    let curr_pass = document.getElementById('current_pass').value;
+                    var _id = document.getElementById('user_id').value;
+
+                    let cur_pass_err = document.getElementById('cur_pass_err');
+
+                    cur_pass_err.textContent = '';
+
+                    await fetch(`/my-account/verify/${_id}`, {
+                        method: 'POST',
+                        body: JSON.stringify({ password: curr_pass }),
+                        headers: { 'Content-Type': 'application/json' }
+                    }).then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                cur_pass_err.textContent = '';
+                                document.getElementById('newPass').style.display = "block";
+                                document.getElementById('confirmPass').style.display = "block";
+                                document.getElementById('Update_pass').style.display = "block";
+                                document.getElementById("verify_pass").style.display = "none";
+                                document.getElementById("currentPass").style.display = "none";
+                                document.getElementById("checkboxx").style.display = "none";
+                            } else {
+                                cur_pass_err.textContent = data?.msg
+                            }
+                        })
+                })
+            };
+
+
+            function isStrongPassword(password) {
+                const minLength = 8;
+                const uppercaseRegex = /[A-Z]/;
+                const lowercaseRegex = /[a-z]/;
+                const numberRegex = /[0-9]/;
+                const specialCharRegex = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/;
+
+                const isMinLength = password.length >= minLength;
+                const hasUppercase = uppercaseRegex.test(password);
+                const hasLowercase = lowercaseRegex.test(password);
+                const hasNumber = numberRegex.test(password);
+                const hasSpecialChar = specialCharRegex.test(password);
+
+                return isMinLength && hasUppercase && hasLowercase && hasNumber && hasSpecialChar;
+            };
+
+            let update_password = document.getElementById('Update_pass');
+            if (update_password) {
+                update_password.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    const newPass = document.getElementById('new_password_id');
+                    const confirmPass = document.getElementById('confirm_new_pass_id');
+
+                    let new_pass_err = document.getElementById('new_pass_err');
+                    let confim_pass_err = document.getElementById('confim_pass_err');
+
+                    new_pass_err.textContent = '';
+                    confim_pass_err.textContent = '';
+                    switch (true) {
+                        case newPass.value === '': new_pass_err.textContent = 'This field id is required'
+                            break;
+                        case confirmPass.value === '': confim_pass_err.textContent = 'This field is required'
+                            break;
+                        case newPass.value !== confirmPass.value: new_pass_err.textContent = 'Password is not matching'
+                            break;
+                        case !isStrongPassword(newPass.value):
+                            new_pass_err.textContent = 'Please use a stronger password';
+                            break;
+                        default:
+                            let payload = {
+                                user_password: newPass.value
+                            }
+                            var _id = document.getElementById('user_id').value;
+                            await fetch(`/my-account/update_pass/${_id}`, {
+                                method: 'POST',
+                                body: JSON.stringify(payload),
+                                headers: { 'Content-Type': 'application/json' }
+
+                            }).then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        location.assign('/my-account');
+                                    }
+                                })
+                    }
+                })
+            };
+
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+</body>
+
+</html>

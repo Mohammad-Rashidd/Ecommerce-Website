@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            padding-top: 70px;
+        }
+
+
+
+
+        #sidebar-wrapper {
+            top: 0;
+            bottom: 0;
+            width: 250px;
+            background-color: #343a40;
+            color: #ffffff;
+            overflow-y: auto;
+
+
+        }
+
+
+        #sidebar-wrapper .sidebar-heading {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        #sidebar-wrapper .list-group-item {
+            padding: 15px;
+            text-align: center;
+            border: none;
+            color: #ffffff;
+        }
+
+        #sidebar-wrapper .list-group-item:hover {
+            background-color: #007bff;
+        }
+
+
+        #page-content-wrapper {
+            width: calc(100% - 250px);
+
+        }
+
+        .navbar {
+            background-color: #000000;
+
+            box-shadow: 0 4px 2px -2px gray;
+            min-height: 20px;
+            padding: 3px;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+        }
+
+        .navbar-toggler {
+            background-color: #007bff;
+
+        }
+
+        .navbar-nav {
+            margin-left: auto;
+        }
+
+        .navbar-nav .nav-item {
+            margin-left: 10px;
+        }
+
+        .navbar-nav .nav-link {
+            color: #ffffff;
+        }
+
+        .navbar-brand img {
+            height: 20px;
+
+            margin-right: 10px;
+
+        }
+
+        .container-fluid {
+            padding: 10px;
+        }
+
+        .profile-pic {
+            width: 100px;
+            height: 100px;
+        }
+
+
+        /* Toggle button styles */
+        #sidebarToggle {
+            background-color: #9ab9da;
+            color: #ffffff;
+            border: none;
+            padding: 8px 10px;
+            cursor: pointer;
+            display: none;
+        }
+
+        @media (max-width: 992px) {
+            #wrapper.toggled #sidebar-wrapper {
+                margin-left: -250px;
+            }
+
+            #sidebarToggle {
+                display: block;
+            }
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+
+        th.actions {
+            width: 30%;
+        }
+
+        .list-group-item:hover {
+            background-color: #007bff;
+
+            color: #b40b0b;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" id="sidebarToggle">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <a class="navbar-brand" href="#">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbc84oY0DleNaQ5jQUEszXCwXLWkGLmeutZQ&usqp=CAU"
+                    alt="Logo">
+                eCart Admin
+            </a>
+
+            <!-- Logout Button -->
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Sidebar and Page Content -->
+
+    <div class="d-flex" id="wrapper">
+
+        <!-- Sidebar -->
+        <div class="bg-dark text-light " id="sidebar-wrapper">
+            <div class="sidebar-heading py-4 px-3">
+                <img src="/image/photo.png" alt="Profile Photo" class="img-fluid profile-pic rounded-circle mb-2">
+                <h5>Mohammad Rashid</h5>
+            </div>
+            <div class="list-group list-group-flush">
+                <a href="/admin/dash"
+                    class="list-group-item list-group-item-action fa-solid fas fa-layer-group bg-dark text-light mb-2">
+                    Dashboard</a>
+                <a href="/admin/allusers"
+                    class="list-group-item list-group-item-action fa-solid fas fa-user bg-dark text-light mb-2">
+                    Users</a>
+                <a href="/admin/categories"
+                    class="list-group-item list-group-item-action fa-solid fas fa-th-large bg-dark text-light mb-2">
+                    Categories</a>
+                <a href="/admin/products"
+                    class="list-group-item list-group-item-action fa-solid fas fa-box-open bg-dark text-light mb-2">
+                    Products</a>
+                <a href="/admin/orders"
+                    class="list-group-item list-group-item-action fa-solid fas fa-cart-arrow-down bg-dark text-light">
+                    Orders</a>
+                <a href="/admin/banners"
+                    class="list-group-item list-group-item-action fa-solid fas fa-flag bg-dark text-light"> Manage
+                    Banner</a>
+                <a href="/admin/coupons"
+                    class="list-group-item list-group-item-action fa-solid fas fa-money-bill-wave bg-dark text-light">
+                    Manage
+                    Coupen</a>
+                <a href="/admin/sales-report"
+                    class="list-group-item list-group-item-action fa-solid fas fa-file-export bg-dark text-light"> Sales
+                    Report</a>
+                <a href="/admin/notifications"
+                    class="list-group-item list-group-item-action fa-solid fas fa-bell bg-dark text-light"> Return
+                    Requests</a>
+            </div>
+        </div>
+
+
+
+        <div id="page-content-wrapper">
+
+            <div class="container py-4">
+                <%- include("../partials/flashMessages") %>
+                    <div class="d-flex justify-content-between align-items-center m-3">
+
+                        <div class="col d-flex justify-content-between align-items-center">
+                            <h2>All Orders</h2>
+                        </div>
+
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <table id="orderTable"
+                                    class="table table-striped table-hover align-middle table-bordered">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th class="th-sm">Product Name
+                                            </th>
+                                            <th class="th-sm">UserName
+                                            </th>
+                                            <th class="th-sm">Order Date
+                                            </th>
+                                            <th class="th-sm">Address
+                                            </th>
+                                            <th>Quantity/Price
+                                            </th>
+                                            <th class="th-sm">Status
+                                            </th>
+                                            <!-- <th class="th-sm">Invoice
+                                            </th> -->
+                                            <th class="th-sm">Manage
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% orderDetails.forEach(order=> { %>
+                                            <tr>
+                                                <td>
+                                                    <%= order.products.name %>
+                                                </td>
+                                                <td>
+                                                    <%= order.userName.username %>
+                                                </td>
+                                                <td>
+                                                    <%= order.createdAt %>
+                                                </td>
+                                                <td>
+                                                    <span class="fw-bold">
+                                                        <%= order.address.address_name %>
+                                                    </span>,
+                                                    <%= order.address.house_name %>(H),
+                                                        <%= order.address.area_street %>,
+                                                            <%= order.address.town %>,
+                                                                <%= order.address.pincode %>,
+                                                                    PH: <%= order.address.phone %>
+                                                </td>
+                                                <td>(<%= order.items.quantity %>),
+                                                        <%= order.items.price %>
+                                                </td>
+                                                <td <% if (order.items.cancelled_on) { %> class="text-danger fw-bold" <%
+                                                        } %>><%= order.items.status %>
+                                                </td>
+                                                <!-- <td><a
+                                                        href="/admin/orders/view-invoice?productId=<%= order.items.product_id %>&orderId=<%= order._id %>">view</a>
+                                                </td> -->
+                                                <td>
+                                                    <% if (order.items.delivered) { %>
+                                                        <p>delivered</p>
+                                                        <% } %>
+                                                            <% if (order.items.cancelled) { %>
+                                                                <p>Cancelled</p>
+                                                                <% } %>
+                                                                    <% if (order.items.all) { %>
+                                                                        <a style="text-decoration: none;"
+                                                                            class="btn add-btn btn-success "
+                                                                            href="/admin/manage-order?productId=<%= order.items.product_id %>&orderId=<%= order._id %>">manage</a>
+                                                                        <% } %>
+                                                </td>
+                                            </tr>
+                                            <% }); %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+            </div>
+        </div>
+        <!-- Page content -->
+
+    </div>
+
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#orderTable').DataTable({
+                paging: true,
+                searching: true,
+                ordering: true,
+                responsive: true,
+            });
+        });
+        const sidebarToggle = document.getElementById("sidebarToggle");
+        sidebarToggle.addEventListener("click", function () {
+            document.getElementById("wrapper").classList.toggle("toggled");
+        });
+    </script>
+</body>
+
+</html>

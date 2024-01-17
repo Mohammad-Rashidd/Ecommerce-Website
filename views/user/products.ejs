@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ecommerce Navbar Design</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <style>
+        .navbar {
+            border-bottom: 1px solid #cccccc;
+            background-color: #520eac;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+
+        .navbar .brand-name {
+            color: #fff;
+        }
+
+        .navbar .nav-link {
+            color: #fff;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .navbar .dropdown-menu {
+            padding: 0px 0px;
+            border-radius: 0px;
+        }
+
+        .navbar .dropdown-menu .dropdown-item {
+            padding: 8px 16px;
+            border-bottom: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        .navbar .navbar {
+            padding: 0px;
+            background-color: #ddd;
+        }
+
+        .navbar .navbar .nav-item .nav-link {
+            padding: 8px 20px;
+            color: #000;
+            font-size: 15px;
+        }
+
+        .product-card {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            margin-bottom: 24px;
+        }
+
+        .product-card a {
+            text-decoration: none;
+        }
+
+        .product-card .stock {
+            position: absolute;
+            color: #fff;
+            border-radius: 4px;
+            padding: 2px 12px;
+            margin: 8px;
+            font-size: 12px;
+        }
+
+        .product-card .product-card-img {
+            height: 200px;
+            overflow: hidden;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .product-card .product-card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .product-card .product-card-body {
+            padding: 10px 10px;
+        }
+
+        .product-card .product-card-body .product-brand {
+            font-size: 14px;
+            font-weight: 400;
+            margin-bottom: 4px;
+            color: #937979;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+
+        .product-card .product-card-body .product-name {
+            font-size: 20px;
+            font-weight: 600;
+            color: #000;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+
+        .product-card .product-card-body .selling-price {
+            font-size: 22px;
+            color: #000;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+
+        .product-card .product-card-body .original-price {
+            font-size: 18px;
+            color: #937979;
+            font-weight: 400;
+            text-decoration: line-through;
+        }
+
+        .product-card .product-card-body .btn1 {
+            border: 1px solid;
+            margin-right: 3px;
+            border-radius: 0px;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md navbar-light  sticky-top">
+        <div class="container-fluid">
+            <div class="col-md-2 my-auto d-none d-md-block">
+                <a href="/userHome" class="navbar-brand d-md-block">
+                    <h5 class="brand-name">eCart</h5>
+                </a>
+            </div>
+
+
+            <div class="col-md-5 my-auto">
+                <form role="search" id="searchForm">
+                    <div class="input-group">
+                        <input type="search" placeholder="Search your product" class="form-control" id="searchInput" />
+                        <button class="btn bg-white" type="submit">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+
+            <button id="navbarToggle" class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse col-md-5 my-auto justify-content-end" id="navbarNav">
+                <ul class="navbar-nav ml-auto ">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/products">
+                            <i class="fa fa-cube"></i> All Products
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/orders">
+                            <i class="fa fa-shopping-bag"></i> Orders
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/cart">
+                            <i class="fa fa-shopping-cart"></i> Cart
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/my-account/wishlist">
+                            <i class="fa fa-heart"></i> Wishlist
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/my-account">
+                            <i class="fa fa-user"></i> Profile
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">
+                            <i class="fa fa-sign-out"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="row container-fluid">
+        <!-- Sidebar -->
+        <div class="col-md-2">
+            <h3 class="my-4" style="color: #520eac;">All Products</h3>
+            <div role="button" class="border Showcategory rounded px-3 py-2 d-flex justify-content-between h5"
+                onclick="toggleCategoryDropdown()">
+                Category
+                <i role="button" class="fa-solid fa fa-caret-down"></i>
+            </div>
+            <div class="p-2 category rounded border" id="categoryDropdown" style="display: none;">
+                <% categories.forEach(cat=> { %>
+                    <div class="ms-2 form-check">
+                        <input role="button" class="filter-button" type="checkbox" value="category=<%= cat.name %>"
+                            id="category=<%= cat.name %>">
+                        <label role="button" class="form-check-label" for="category=<%= cat.name %>">
+                            <%= cat.name %>
+                        </label>
+                    </div>
+                    <% }); %>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-9">
+            <!-- Sort Section -->
+            <div class="sort-container d-flex justify-content-between align-items-center my-4">
+                <h4 class="fw-bold">Sort:</h4>
+                <div>
+                    <p role="button" onclick="sorting('sort=low-high')" class="h6 mt-1 btn btn-dark">Price low-high</p>
+                </div>
+                <div>
+                    <p role="button" onclick="sorting('sort=high-low')" class="h6 mt-1 btn btn-dark">Price high-low</p>
+                </div>
+                <div>
+                    <p role="button" onclick="sorting('sort=new-first')" class="h6 mt-1 btn btn-dark">New First</p>
+                </div>
+            </div>
+
+            <!-- Product Cards -->
+            <div class="row" id="productList">
+                <% Products.forEach(product=> { %>
+                    <div class="col-md-3 mb-4">
+                        <section class="card p-2">
+
+                            <img class="card-img" style="height:150px;object-fit:contain;"
+                                src="/image/product/<%= product.image[0] %>" alt="">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <%= product.name %>
+                                </h5>
+                                <div class="price text-primary">
+                                    <h5 class="mt-2">₹<%= product.price %>
+                                    </h5>
+                                </div>
+                            </div>
+                            <div class="d-flex">
+                                <button onclick="addToCart('<%= product._id %>')" role="button" type="button"
+                                    class="btn add-btn btn-success">Add to Cart</button>
+
+
+                                <% if (product.wish) { %>
+                                    <i id="heart<%= product._id %>"
+                                        class="fa-regular add-to-wish-list-btn fa-2x fa fa-heart ms-4"
+                                        onclick="addToWishlist('<%= product._id %>')" role="button"></i>
+                                    <% } else { %>
+                                        <i id="heart<%= product._id %>"
+                                            class="fa-solid text-danger add-to-wish-list-btn fa-2x fa fa-heart ms-4"
+                                            onclick="addToWishlist('<%= product._id %>')" role="button"></i>
+                                        <% } %>
+                            </div>
+                        </section>
+                    </div>
+                    <% }); %>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+    <!-- Footer -->
+    <%- include("../partials/footer") %>
+        <script>
+            $(document).ready(() => {
+                $('#navbarToggle').click(() => {
+                    $('.navbar-nav').slideToggle();
+                });
+            });
+
+            function toggleCategoryDropdown() {
+                var categoryDropdown = document.getElementById('categoryDropdown');
+                if (categoryDropdown.style.display === 'none') {
+                    categoryDropdown.style.display = 'block';
+                } else {
+                    categoryDropdown.style.display = 'none';
+                }
+            };
+            const addToCart = async (productID) => {
+                try {
+                    const response = await fetch(`/cart/add-to-cart/${productID}`, {
+                        method: 'GET'
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+
+                    const data = await response.json();
+
+                    if (data.status) {
+
+                        let cartCount = document.getElementById('cartCount');
+                        if (cartCount) {
+                            cartCount.innerText = data.count;
+                        }
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Product Added',
+                            text: 'This product added to the cart.',
+                        });
+                    } else {
+                        if (data.error && data.error === "Product Out of Stock") {
+                            await Swal.fire({
+                                icon: 'warning',
+                                title: 'Product Out of Stock',
+                                text: 'This product is currently out of stock.',
+                            });
+
+                        } else {
+                            location.assign('/cart');
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    await Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'An error occurred while adding the product to the cart.'
+                    });
+                }
+            };
+
+            const addToWishlist = async (id) => {
+                const heart = document.getElementById(`heart${id}`);
+                await fetch(`/product/add-to-wishlist/${id}`, {
+                    method: 'GET'
+                }).then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            heart.classList.remove("fa-regular")
+                            heart.classList.add("fa-solid")
+                            heart.classList.add("text-danger")
+
+                        } else {
+                            heart.classList.remove("fa-solid")
+                            heart.classList.remove("text-danger")
+                            heart.classList.add("fa-regular")
+
+                        }
+                    })
+            };
+
+            let urlString = window.location.href;
+            const url = new URL(urlString);
+            const queryParameters = url.searchParams;
+            const params = [];
+            queryParameters.forEach((value, key) => {
+                params.push(key + '=' + value)
+                if (key == 'category') {
+                    let filter = document.getElementById(key + '=' + value).checked = true;
+                }
+            });
+
+            $('.filter-button').on('click', (e) => {
+                let link = window.location.href;
+                link = decodeURIComponent(link);
+                if (link.includes(e.target.value)) {
+                    link = link.replace('&' + e.target.value, '').replace(e.target.value, '')
+
+                } else {
+                    if (link.includes('?', '=')) {
+                        link = link + '&' + e.target.value
+                    } else {
+                        link = link + '?' + e.target.value
+                    }
+                }
+                location.assign(link)
+            })
+
+            sorting = (sortQuery) => {
+                let link = window.location.href;
+                link = decodeURIComponent(link);
+                if (link.includes("sort")) {
+                    link = link.replace(/sort=[^&]+/, sortQuery);
+                } else {
+                    if (link.includes('?')) {
+                        link = link + '&' + sortQuery;
+                    } else {
+                        link = link + '?' + sortQuery;
+                    }
+                }
+                location.assign(link);
+            };
+
+            $(document).ready(function () {
+                $('#searchForm').submit(function (event) {
+                    event.preventDefault();
+                    const searchQuery = $('#searchInput').val().trim();
+
+                    $.ajax({
+                        type: 'GET',
+                        url: '/products/search',
+                        data: { query: searchQuery },
+                        success: function (response) {
+                            updateProductList(response);
+                        },
+                        error: function (error) {
+                            console.error('Error:', error);
+                        }
+                    });
+                });
+
+                function updateProductList(products) {
+                    $('#productList').empty();
+
+                    products.forEach(function (product) {
+                        const productCard = `
+                        <div class="col-md-3 mb-4">
+                        <section class="card p-2">
+
+                            <img class="card-img" style="height:150px;object-fit:contain;"
+                            src="/image/product/${product.image[0]}" alt="Product Image">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    ${product.name}
+                                </h5>
+                                <div class="price text-primary">
+                                    <h5 class="mt-2">₹${product.price}
+                                    </h5>
+                                </div>
+                            </div>
+                            <div class="d-flex">
+                                <button onclick="addToCart('${product._id}')" role="button" type="button"
+                                    class="btn add-btn btn-success">Add to Cart</button>
+                                    <i id="heart${product._id}"
+                                        class="fa-regular add-to-wish-list-btn fa-2x fa fa-heart ms-4"
+                                        onclick="addToWishlist('${product._id}')" role="button"></i>
+                            </div>
+                        </section>
+                    </div>`;
+                        $('#productList').append(productCard);
+                    });
+                }
+            });
+        </script>
+
+
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+</body>
+
+</html>

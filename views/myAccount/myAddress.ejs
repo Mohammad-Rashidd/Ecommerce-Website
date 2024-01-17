@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ecommerce Cart</title>
+
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <style>
+        .hidden {
+            display: none;
+        }
+
+
+        .add-form label {
+            font-weight: bold;
+        }
+
+        .add-form input[type="submit"],
+        .add-form input[type="reset"] {
+            transition: background-color 0.3s ease;
+        }
+
+        .add-form input[type="submit"]:hover,
+        .add-form input[type="reset"]:hover {
+            background-color: #2ecc71;
+            color: white;
+        }
+
+
+        .btn-light {
+            color: #000;
+        }
+
+        .edit {
+            text-decoration: none;
+            cursor: pointer;
+            color: #007bff;
+            transition: color 0.3s ease;
+        }
+
+        .edit:hover {
+            text-decoration: underline;
+        }
+
+        .text-danger {
+            color: #dc3545;
+        }
+
+        .text-normal {
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        .fw-bold {
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <%- include("../partials/userHeader") %>
+
+
+        <div class="container  mt-5">
+            <div style="width: 36rem;" class="header d-flex align-items-center justify-content-between">
+                <h3 class="h4 user-text fw-bold mb-3" style="color: #520eac;">Manage Addresses</h3>
+                <input id="addAddressButton" class="btn btn-dark user-btn" type="button" value="New Address">
+            </div>
+
+            <form action="/my-account/my-address/new-address" method="post" class="add-form container hidden">
+                <div class="row">
+                    <div class="row col-md-4 me-3">
+                        <div id="name-Err" class=" text-danger"></div>
+                        <label for="form">Name</label>
+                        <input name="address_name" type="text" class="form-control" required>
+                    </div>
+                    <div class="row col-md-4">
+                        <div id="phone-Err" class=" text-danger"></div>
+                        <label for="form">Phone</label>
+                        <input name="phone" type="text" class="form-control" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="row col-md-4 me-3">
+                        <div id="house_name-Err" class=" text-danger"></div>
+                        <label for="form">House Name</label>
+                        <input name="house_name" type="text" class="form-control" required>
+                    </div>
+                    <div class="row col-md-4">
+                        <div id="area_street-Err" class=" text-danger"></div>
+                        <label for="form">Area/Street</label>
+                        <input name="area_street" type="text" class="form-control" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="row col-md-4 me-3">
+                        <div id="locality-Err" class=" text-danger"></div>
+                        <label for="form">Locality</label>
+                        <input name="locality" type="text" class="form-control" required>
+                    </div>
+                    <div class="row col-md-4">
+                        <div id="town-Err" class=" text-danger"></div>
+                        <label for="form">Town</label>
+                        <input name="town" type="text" class="form-control" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="row col-md-4 me-3">
+                        <div id="state-Err" class=" text-danger"></div>
+                        <label for="form">State</label>
+                        <select class="form-select" name="state">
+                            <option value="india">Select State</option>
+                            <option value="Andhra Pradesh">Andhra Pradesh</option>
+                            <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                            <option value="Assam">Assam</option>
+                            <option value="Bihar">Bihar</option>
+                            <option value="Chhattisgarh">Chhattisgarh</option>
+                            <option value="Goa">Goa</option>
+                            <option value="Gujarat">Gujarat</option>
+                            <option value="Haryana">Haryana</option>
+                            <option value="Himachal Pradesh">Himachal Pradesh</option>
+                            <option value="Jharkhand">Jharkhand</option>
+                            <option value="Karnataka">Karnataka</option>
+                            <option value="Kerala">Kerala</option>
+                            <option value="Madhya Pradesh">Madhya Pradesh</option>
+                            <option value="Maharashtra">Maharashtra</option>
+                            <option value="Manipur">Manipur</option>
+                            <option value="Meghalaya">Meghalaya</option>
+                            <option value="Mizoram">Mizoram</option>
+                            <option value="Nagaland">Nagaland</option>
+                            <option value="Odisha">Odisha</option>
+                            <option value="Punjab">Punjab</option>
+                            <option value="Rajasthan">Rajasthan</option>
+                            <option value="Sikkim">Sikkim</option>
+                            <option value="Tamil Nadu">Tamil Nadu</option>
+                            <option value="Telangana">Telangana</option>
+                            <option value="Tripura">Tripura</option>
+                            <option value="Uttar Pradesh">Uttar Pradesh</option>
+                            <option value="Uttarakhand">Uttarakhand</option>
+                            <option value="West Bengal">West Bengal</option>
+                            <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+                            <option value="Chandigarh">Chandigarh</option>
+                            <option value="Dadra and Nagar Haveli and Daman and Diu">Dadra and Nagar Haveli and Daman
+                                and Diu
+                            </option>
+                            <option value="Lakshadweep">Lakshadweep</option>
+                            <option value="Delhi">Delhi</option>
+                            <option value="Puducherry">Puducherry</option>
+                        </select>
+                    </div>
+                    <div class="row col-md-4">
+                        <div id="pincode-Err" class=" text-danger"></div>
+                        <label for="form">Pincode</label>
+                        <input name="pincode" type="number" class="form-control" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="row col-md-4 me-3">
+                        <div id="landmark-Err" class=" text-danger"></div>
+                        <label for="form">Landmark</label>
+                        <input name="landmark" type="text" class="form-control" required>
+                    </div>
+                    <div class="row col-md-4">
+                        <div id="alternate_phone-Err" class=" text-danger"></div>
+                        <label for="form">Alternate Phone</label>
+                        <input name="alternate_phone" type="number" class="form-control">
+                        <input name="user_id" type="hidden" value="<%= userData._id %>" class="form-control">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" value="HOME" name="address_type"
+                            id="flexRadioDefault1" checked>
+                        <label class="form-check-label" for="flexRadioDefault1">
+                            HOME
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" value="WORK" type="radio" name="address_type"
+                            id="flexRadioDefault2">
+                        <label class="form-check-label" for="flexRadioDefault2">
+                            WORK
+                        </label>
+                    </div>
+                </div>
+                <div class="row mt-2 mb-3 d-flex ">
+                    <input class="btn but col-md-3 user-btn btn-lg btn-success" type="submit" />
+                    <input class="ms-2  btn col-md-3 but clear-btn btn-lg btn-danger" type="reset" autocomplete="on"
+                        value="Clear" />
+                </div>
+
+
+            </form>
+
+            <% address.forEach(addressItem=> { %>
+                <div class="row card pt-3 mt-2 col-md-8" style="background-color:#d1bbec;">
+                    <div class="headercont d-flex justify-content-between">
+                        <div style="width: 5rem;" class="btn btn-sm  btn-dark ">
+                            <%= addressItem.address_type %>
+                        </div>
+                        <div class="d-flex">
+                            <a style="text-decoration: none;"
+                                href="/my-account/my-address/edit-address/<%= addressItem._id %>"
+                                class="edit  ms-3 text-success fw-bold">Edit</a>
+                            <a style="text-decoration: none; cursor:pointer"
+                                onclick="deleteAlert('<%= addressItem._id %>')"
+                                class="edit  ms-3 text-danger fw-bold">Delete</a>
+                        </div>
+                    </div>
+                    <p class="h5">
+                        <%= addressItem.address_name %> &emsp; <%= addressItem.phone %>
+                    </p>
+                    <p class="text-normal">
+                        <%= addressItem.house_name %>(H),
+                            <%= addressItem.locality %>,
+                                <%= addressItem.area_street %>,
+                                    <%= addressItem.landmark %>,
+                                        <%= addressItem.state %>
+                                            <span class="fw-bold">
+                                                -<%= addressItem.pincode %>
+                                            </span>
+                    </p>
+                </div>
+                <% }); %>
+        </div>
+
+
+
+
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const addForm = document.querySelector(".add-form");
+
+                addForm.addEventListener("submit", (event) => {
+                    event.preventDefault();
+
+
+                    const addressName = document.querySelector("input[name='address_name']").value.trim();
+                    const phone = document.querySelector("input[name='phone']").value.trim();
+                    const houseName = document.querySelector("input[name='house_name']").value.trim();
+                    const areaStreet = document.querySelector("input[name='area_street']").value.trim();
+                    const locality = document.querySelector("input[name='locality']").value.trim();
+                    const town = document.querySelector("input[name='town']").value.trim();
+                    const state = document.querySelector("select[name='state']").value.trim();
+                    const pincode = document.querySelector("input[name='pincode']").value.trim();
+                    const landmark = document.querySelector("input[name='landmark']").value.trim();
+                    const alternatePhone = document.querySelector("input[name='alternate_phone']").value.trim();
+
+
+                    const nameRegex = /^[a-zA-Z\s]{4,}$/;
+                    const phoneRegex = /^[1-9]\d{9}$/;
+                    const houseNameRegex = /^[a-zA-Z\s]+$/;
+                    const areaStreetRegex = /^[a-zA-Z0-9\s]+$/;
+                    const localityRegex = /^[a-zA-Z\s]+$/;
+                    const townRegex = /^[a-zA-Z\s]+$/;
+                    const pincodeRegex = /^(?!0)\d{6}$/;
+                    const landmarkRegex = /^[a-zA-Z\s]+$/;
+                    const alternatePhoneRegex = /^[1-9]\d{9}$/;
+
+
+                    const addressNameErr = document.getElementById("name-Err");
+                    if (!nameRegex.test(addressName)) {
+                        addressNameErr.textContent = "Please provide a valid Address Name";
+                        return;
+                    } else {
+                        addressNameErr.textContent = "";
+                    }
+
+                    const phoneErr = document.getElementById("phone-Err");
+                    if (!phoneRegex.test(phone)) {
+                        phoneErr.textContent = "Please provide a valid 10-digit phone number";
+                        return;
+                    } else {
+                        phoneErr.textContent = "";
+                    }
+
+                    const houseNameErr = document.getElementById("house_name-Err");
+                    if (!houseNameRegex.test(houseName)) {
+                        houseNameErr.textContent = "Please provide a valid House Name";
+                        return;
+                    } else {
+                        houseNameErr.textContent = "";
+                    }
+
+                    const areaStreetErr = document.getElementById("area_street-Err");
+                    if (!areaStreetRegex.test(areaStreet)) {
+                        areaStreetErr.textContent = "Please provide a valid Area/Street";
+                        return;
+                    } else {
+                        areaStreetErr.textContent = "";
+                    }
+
+                    const localityErr = document.getElementById("locality-Err");
+                    if (!localityRegex.test(locality)) {
+                        localityErr.textContent = "Please provide a valid Locality";
+                        return;
+                    } else {
+                        localityErr.textContent = "";
+                    }
+
+                    const townErr = document.getElementById("town-Err");
+                    if (!townRegex.test(town)) {
+                        townErr.textContent = "Please provide a valid Town";
+                        return;
+                    } else {
+                        townErr.textContent = "";
+                    }
+
+
+                    const pincodeErr = document.getElementById("pincode-Err");
+                    if (!pincodeRegex.test(pincode)) {
+                        pincodeErr.textContent = "Please provide a valid 6-digit Pincode";
+                        return;
+                    } else {
+                        pincodeErr.textContent = "";
+                    }
+
+                    const landmarkErr = document.getElementById("landmark-Err");
+                    if (!landmarkRegex.test(landmark)) {
+                        landmarkErr.textContent = "Please provide a valid Landmark";
+                        return;
+                    } else {
+                        landmarkErr.textContent = "";
+                    }
+
+                    const alternatePhoneErr = document.getElementById("alternate_phone-Err");
+                    if (alternatePhone !== "" && !alternatePhoneRegex.test(alternatePhone)) {
+                        alternatePhoneErr.textContent = "Please provide a valid 10-digit Phone number";
+                        return;
+                    } else {
+                        alternatePhoneErr.textContent = "";
+                    }
+
+
+                    addForm.submit();
+                });
+            });
+
+            deleteAlert = async (addressID) => {
+                try {
+                    const result = await Swal.fire({
+                        title: 'Are you sure?',
+                        text: 'Are you sure you want to remove this address ?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: 'green',
+                        confirmButtonText: 'Yes, remove it!'
+                    });
+
+                    if (result.isConfirmed) {
+                        const response = await fetch(`/my-account//my-address/delete-address/${addressID}`, {
+                            method: 'GET'
+                        });
+
+                        const data = await response.json();
+                        if (data.status) {
+                            location.assign('/my-account/my-address');
+                        }
+                    }
+                } catch (error) {
+                    console.error(error);
+                }
+            };
+        </script>
+        <script>
+            const addAddressButton = document.getElementById('addAddressButton');
+            const addAddressForm = document.querySelector('.add-form');
+
+            addAddressButton.addEventListener('click', function () {
+                addAddressForm.classList.toggle('hidden');
+            });
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+</body>
+
+</html>
