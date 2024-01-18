@@ -5,7 +5,7 @@ const UserModel = require("../models/userModel");
 const Return = require("../models/returnModel");
 const fs = require("fs");
 const ejs = require("ejs");
-const puppeteer = require("puppeteer");
+const PDFDocument = require("pdfkit");
 
 module.exports = {
   renderOrders: async (req, res) => {
@@ -515,40 +515,84 @@ module.exports = {
       const randomInvoiceId = generateRandomInvoiceId();
       showOrder.invoiceId = randomInvoiceId;
 
-      const html = await ejs.renderFile("./views/pdf/invoice.ejs", {
-        showOrder,
-      });
+      const doc = new PDFDocument();
 
-      const browser = await puppeteer.launch({
-        headless: "new",
-      });
-      const page = await browser.newPage();
-      await page.setContent(html);
-      await page.pdf({
-        path: "./invoice.pdf",
-        format: "A4",
-        margin: {
-          top: "5mm",
-          right: "0mm",
-          bottom: "5mm",
-          left: "0mm",
-        },
-      });
-
-      await browser.close();
-
-      const pdfStream = fs.createReadStream("./invoice.pdf");
       res.setHeader("Content-Type", "application/pdf");
-      res.setHeader("Content-Disposition", `attachment; filename=invoice.pdf`);
-      pdfStream.pipe(res);
+      res.setHeader(
+        "Content-Disposition",
+        `attachment; filename="invoice.pdf"`
+      );
 
-      setTimeout(() => {
-        fs.unlink("./invoice.pdf", (err) => {
-          if (err) {
-            console.error(err.message);
-          }
+      doc.pipe(res);
+
+      doc.fontSize(20).fillColor("purple").text(`INVOICE`, { align: "center" });
+      doc.fontSize(12).fillColor("black").text(` `, { continued: true });
+      doc.moveDown();
+
+      doc.text(`eCart Invoice: ${showOrder.invoiceId}`);
+      doc.text(`Sold by: eCart`);
+      doc.text(`eCart.com`);
+      doc.text(`+91 7736363636`);
+      doc.moveDown();
+
+      doc.fontSize(20).fillColor("purple").text(`Billed To:`);
+      doc.fontSize(12).fillColor("black").text(` `, { continued: true });
+      doc.text(`${showOrder.user.username}`);
+      doc.text(
+        `${showOrder.address.house_name}(H),${showOrder.address.area_street}`
+      );
+      doc.text(`${showOrder.address.locality},${showOrder.address.town}`);
+      doc.text(`${showOrder.address.state},${showOrder.address.pincode}`);
+      doc.text(`${showOrder.user.email}`);
+      doc.text(`${showOrder.user.phone}`);
+      doc.text(`PAYMENT METHOD : ${showOrder.payment_method}`);
+      doc.moveDown();
+
+      doc
+        .fontSize(20)
+        .fillColor("purple")
+        .text(`Order Summary`, { align: "center" });
+      doc.moveDown();
+
+      const tableHeaders = ["No.", "Item", "Price", "Quantity"];
+
+      const tableData = [
+        {
+          no: "01",
+          item: showOrder.product.name,
+          price: showOrder.items.price,
+          quantity: showOrder.items.quantity,
+        },
+      ];
+
+      const startX = 50;
+      let startY = doc.y + 10;
+
+      const colWidth = 140;
+
+      doc.fontSize(12).fillColor("red");
+      tableHeaders.forEach((header, index) => {
+        doc.text(header, startX + index * colWidth, startY);
+      });
+
+      doc.fontSize(12).fillColor("black");
+      startY += 20;
+      tableData.forEach((row, rowIndex) => {
+        Object.values(row).forEach((cell, colIndex) => {
+          doc.text(
+            cell.toString(),
+            startX + colIndex * colWidth,
+            startY + rowIndex * 20
+          );
         });
-      }, 40000);
+      });
+      doc.moveDown(2);
+
+      const feeAndTotalX = 450;
+      doc.text(`Shipping fee: 0`, feeAndTotalX, doc.y);
+      doc.text(`Total: ${showOrder.items.price * showOrder.items.quantity}`, feeAndTotalX, doc.y);
+
+      doc.end();
     } catch (error) {
       res.json({
         success: false,
