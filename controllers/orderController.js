@@ -548,7 +548,7 @@ module.exports = {
             console.error(err.message);
           }
         });
-      }, 5000);
+      }, 40000);
     } catch (error) {
       res.json({
         success: false,
