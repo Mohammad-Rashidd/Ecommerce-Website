@@ -114,8 +114,8 @@ module.exports = {
       const transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
-          user: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASS,
+          user: "achivallithode3@gmail.com",
+          pass: "zpqa qvvb oqjv ruxx",
         },
         tls: {
           rejectUnauthorized: false,
@@ -184,8 +184,8 @@ module.exports = {
       const transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
-          user: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASS,
+          user: "achivallithode3@gmail.com",
+          pass: "zpqa qvvb oqjv ruxx",
         },
         tls: {
           rejectUnauthorized: false,
