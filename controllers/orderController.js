@@ -5,7 +5,7 @@ const UserModel = require("../models/userModel");
 const Return = require("../models/returnModel");
 const fs = require("fs");
 const ejs = require("ejs");
-const pdf = require("pdf-creator-node");
+const puppeteer = require("puppeteer");
 
 module.exports = {
   renderOrders: async (req, res) => {
@@ -515,50 +515,40 @@ module.exports = {
       const randomInvoiceId = generateRandomInvoiceId();
       showOrder.invoiceId = randomInvoiceId;
 
-      const html = fs.readFileSync("./views/pdf/invoice.ejs", "utf8");
-      const renderedHtml = ejs.render(html, { showOrder });
+      const html = await ejs.renderFile("./views/pdf/invoice.ejs", {
+        showOrder,
+      });
 
-      const options = {
-        format: "A4",
-        orientation: "landscape",
-        border: "600mm",
-        header: {
-          height: "10mm",
-          contents: '<div style="text-align: center;">INVOICE</div>',
-        },
-      };
-
-      const document = {
-        html: renderedHtml,
-        data: {
-          showOrder: showOrder,
-        },
+      const browser = await puppeteer.launch({
+        headless: "new",
+      });
+      const page = await browser.newPage();
+      await page.setContent(html);
+      await page.pdf({
         path: "./invoice.pdf",
-        type: "",
-      };
+        format: "A4",
+        margin: {
+          top: "5mm",
+          right: "0mm",
+          bottom: "5mm",
+          left: "0mm",
+        },
+      });
 
-      pdf
-        .create(document, options)
-        .then(() => {
-          const pdfStream = fs.createReadStream("invoice.pdf");
-          res.setHeader("Content-Type", "application/pdf");
-          res.setHeader(
-            "Content-Disposition",
-            `attachment; filename=invoice.pdf`
-          );
-          pdfStream.pipe(res);
-          setTimeout(() => {
-            fs.unlink("./invoice.pdf", (err) => {
-              if (err) {
-                throw new Error(err.message);
-              }
-            });
-          }, 5000);
-        })
-        .catch((error) => {
-          console.error("this is the error", error);
-          res.send("Error generating the PDF");
+      await browser.close();
+
+      const pdfStream = fs.createReadStream("./invoice.pdf");
+      res.setHeader("Content-Type", "application/pdf");
+      res.setHeader("Content-Disposition", `attachment; filename=invoice.pdf`);
+      pdfStream.pipe(res);
+
+      setTimeout(() => {
+        fs.unlink("./invoice.pdf", (err) => {
+          if (err) {
+            console.error(err.message);
+          }
         });
+      }, 5000);
     } catch (error) {
       res.json({
         success: false,
