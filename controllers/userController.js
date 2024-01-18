@@ -294,13 +294,6 @@ module.exports = {
   },
 
   showVerifyEmailPage: (req, res) => {
-    const { email } = req.query;
-
-    if (email) {
-      res.render("user/verifyEmail", { email, messages: req.flash() });
-    } else {
-      res.send("Invalid request");
-    }
     try {
       const { email } = req.query;
 
